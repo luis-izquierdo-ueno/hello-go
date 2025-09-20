@@ -2,6 +2,8 @@ package server
 
 import (
 	"fmt"
+	core "hello-go/internal"
+	"hello-go/internal/platform/server/handler/courses"
 	"hello-go/internal/platform/server/handler/health"
 	"log"
 
@@ -11,12 +13,15 @@ import (
 type Server struct{
 	httpAddress string
 	engine *gin.Engine
+	
+	courseRepository core.CourseRepository
 }
 
-func New(host string, port uint) Server {
+func New(host string, port uint, courseRepository core.CourseRepository) Server {
 	server := Server{
 		engine: gin.New(),
 		httpAddress: fmt.Sprintf("%s:%d", host, port),
+		courseRepository: courseRepository,
 	}
 
 	server.registerRoutes()
@@ -31,5 +36,6 @@ func (server *Server) Run() error {
 
 func (server *Server) registerRoutes() {
 	server.engine.GET("/health", health.CheckHandler())
+	server.engine.POST("/courses", courses.CreateHandler(server.courseRepository))
 }
 
