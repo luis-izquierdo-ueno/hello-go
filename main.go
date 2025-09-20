@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 
@@ -12,14 +14,13 @@ const httpAddress = ":8080"
 func main(){
 	fmt.Println("Server is running on port", httpAddress)
 
-	mux := http.NewServeMux()
+	server := gin.New()
 
-	mux.HandleFunc("/health", healthHandler)
+	server.GET("/health", healthHandler)
 
-	log.Fatal(http.ListenAndServe(httpAddress, mux))
+	log.Fatal(server.Run(httpAddress))
 }
 
-func healthHandler(w http.ResponseWriter, _ *http.Request){
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Healthy!"))
+func healthHandler(ctx *gin.Context){
+	ctx.String(http.StatusOK, "Healthy!")
 }
