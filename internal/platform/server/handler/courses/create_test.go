@@ -3,6 +3,7 @@ package courses
 import (
 	"bytes"
 	"encoding/json"
+	"hello-go/internal/creating"
 	"hello-go/internal/platform/storage/storagemocks"
 	"net/http"
 	"net/http/httptest"
@@ -18,11 +19,12 @@ import (
 func TestHandler_Create(test *testing.T) {
 	
 	courseRepository:= new(storagemocks.CourseRepository)
+	creatingCourseService := creating.NewCourseService(courseRepository)
 	courseRepository.On("Save", mock.Anything, mock.AnythingOfType("core.Course")).Return(nil)
 
 	gin.SetMode(gin.TestMode)
 	engine := gin.New()
-	engine.POST("/courses", CreateHandler(courseRepository))
+	engine.POST("/courses", CreateHandler(*creatingCourseService))
 	
 	test.Run("given and invalid request, should return a 400 status code", func(test *testing.T) {
 		createCourseRequest := createRequest{
