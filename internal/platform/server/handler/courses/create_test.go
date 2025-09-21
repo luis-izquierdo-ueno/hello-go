@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -47,7 +48,7 @@ func TestHandler_Create(test *testing.T) {
 
 	test.Run("given a valid request, should return a 201 status code", func(test *testing.T) {
 		createCourseRequest := createRequest{
-			ID: "123", 
+			ID: uuid.New().String(), 
 			Name: "Go Course", 
 			Duration: "40h",
 		}
