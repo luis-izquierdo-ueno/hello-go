@@ -36,20 +36,20 @@ type CourseRepository interface {
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=CourseRepository
 
 type Course struct {
-	id CourseID 
-	name string 
-	duration string 
+	id       CourseID
+	name     string
+	duration string
 }
 
 func NewCourse(id string, name string, duration string) (Course, error) {
 	idVO, err := NewCourseID(id)
-	if err != nil{
+	if err != nil {
 		return Course{}, err
 	}
 
 	return Course{
-		id: idVO,
-		name: name,
+		id:       idVO,
+		name:     name,
 		duration: duration,
 	}, nil
 }

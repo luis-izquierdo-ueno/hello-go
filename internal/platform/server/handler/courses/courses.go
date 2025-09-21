@@ -10,8 +10,8 @@ import (
 )
 
 type createRequest struct {
-	ID string `json:"id" binding:"required"`
-	Name string `json:"name" binding:"required"`
+	ID       string `json:"id" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 	Duration string `json:"duration" binding:"required"`
 }
 
@@ -26,7 +26,7 @@ func CreateHandler(creatingCourseService creating.CourseService) gin.HandlerFunc
 
 		err := creatingCourseService.CreateCourse(c, request.ID, request.Name, request.Duration)
 		if err != nil {
-			switch  {
+			switch {
 			case errors.Is(err, core.ErrInvalidCourseID):
 				c.JSON(http.StatusBadRequest, err.Error())
 				return
@@ -36,7 +36,6 @@ func CreateHandler(creatingCourseService creating.CourseService) gin.HandlerFunc
 			}
 		}
 
-	
 		c.Status(http.StatusCreated)
 	}
 }

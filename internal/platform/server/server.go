@@ -15,18 +15,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Server struct{
+type Server struct {
 	httpAddress string
-	engine *gin.Engine
+	engine      *gin.Engine
 
 	shutdownTimeout time.Duration
-	
+
 	creatingCourseService creating.CourseService
 }
 
 func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, creatingCourseService creating.CourseService) (context.Context, Server) {
 	server := Server{
-		engine: gin.New(),
+		engine:      gin.New(),
 		httpAddress: fmt.Sprintf("%s:%d", host, port),
 
 		shutdownTimeout: shutdownTimeout,
@@ -43,11 +43,11 @@ func (server *Server) Run(ctx context.Context) error {
 	log.Println("Starting server on", server.httpAddress)
 
 	srv := &http.Server{
-		Addr: server.httpAddress,
+		Addr:    server.httpAddress,
 		Handler: server.engine,
 	}
-	
-	go func(){
+
+	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Could not listen on %s: %v\n", server.httpAddress, err)
 		}
@@ -61,10 +61,10 @@ func (server *Server) Run(ctx context.Context) error {
 }
 
 func serverContext(ctx context.Context) context.Context {
-	c:=make(chan os.Signal, 1)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
-	ctx, cancel:= context.WithCancel(ctx)
-	go func(){
+	ctx, cancel := context.WithCancel(ctx)
+	go func() {
 		<-c
 		cancel()
 	}()
@@ -75,4 +75,3 @@ func (server *Server) registerRoutes() {
 	server.engine.GET("/health", health.CheckHandler())
 	server.engine.POST("/courses", courses.CreateHandler(server.creatingCourseService))
 }
-

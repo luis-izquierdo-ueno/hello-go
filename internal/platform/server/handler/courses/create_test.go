@@ -17,19 +17,19 @@ import (
 )
 
 func TestHandler_Create(test *testing.T) {
-	
-	courseRepository:= new(storagemocks.CourseRepository)
+
+	courseRepository := new(storagemocks.CourseRepository)
 	creatingCourseService := creating.NewCourseService(courseRepository)
 	courseRepository.On("Save", mock.Anything, mock.AnythingOfType("core.Course")).Return(nil)
 
 	gin.SetMode(gin.TestMode)
 	engine := gin.New()
 	engine.POST("/courses", CreateHandler(*creatingCourseService))
-	
+
 	test.Run("given and invalid request, should return a 400 status code", func(test *testing.T) {
 		createCourseRequest := createRequest{
-			ID: "123", 
-			Name: "Go Course", 
+			ID:   "123",
+			Name: "Go Course",
 		}
 
 		body, err := json.Marshal(createCourseRequest)
@@ -40,7 +40,6 @@ func TestHandler_Create(test *testing.T) {
 
 		recorder := httptest.NewRecorder()
 		engine.ServeHTTP(recorder, request)
-		
 
 		response := recorder.Result()
 		defer response.Body.Close()
@@ -50,8 +49,8 @@ func TestHandler_Create(test *testing.T) {
 
 	test.Run("given a valid request, should return a 201 status code", func(test *testing.T) {
 		createCourseRequest := createRequest{
-			ID: uuid.New().String(), 
-			Name: "Go Course", 
+			ID:       uuid.New().String(),
+			Name:     "Go Course",
 			Duration: "40h",
 		}
 
@@ -63,7 +62,6 @@ func TestHandler_Create(test *testing.T) {
 
 		recorder := httptest.NewRecorder()
 		engine.ServeHTTP(recorder, request)
-		
 
 		response := recorder.Result()
 		defer response.Body.Close()

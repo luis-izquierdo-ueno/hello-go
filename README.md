@@ -63,6 +63,13 @@ go build -o bin/hello-go cmd/api/main.go
 ./bin/hello-go
 ```
 
+### Verificar Compilación
+```bash
+# Verificar que el binario se compiló correctamente
+ls -la bin/
+file bin/hello-go  # Debería mostrar: Mach-O 64-bit executable arm64
+```
+
 La aplicación se ejecutará en `http://localhost:8080`
 
 ## 🔧 Endpoints Disponibles
@@ -100,6 +107,7 @@ go test -v ./...
 ```bash
 go test ./internal/creating/
 go test ./internal/platform/server/handler/courses/
+go test -v ./internal/creating/  # Con detalles verbose
 ```
 
 ### Ejecutar Tests con Coverage
@@ -113,6 +121,15 @@ go test -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out -o coverage.html
 ```
 
+> **Nota**: Esto generará `coverage.html` que puedes abrir en tu navegador para ver un reporte detallado del coverage por archivo y línea.
+
+### Resultados de Coverage Esperados
+```
+internal/creating                    coverage: 80.0% of statements
+internal/platform/server/handler/courses    coverage: 61.5% of statements  
+internal/platform/storage/mysql     coverage: 100.0% of statements
+```
+
 ## 🎭 Generación de Mocks
 
 Este proyecto utiliza [Mockery](https://github.com/vektra/mockery) para generar mocks automáticamente.
@@ -124,8 +141,12 @@ go install github.com/vektra/mockery/v2@latest
 
 ### Generar Mocks
 
-#### Opción 1: Usar go generate
+#### Opción 1: Usar go generate (Recomendado)
 ```bash
+# Asegurar que mockery esté en el PATH
+export PATH=$PATH:~/go/bin
+
+# Generar mocks usando las directivas //go:generate
 go generate ./internal/courses.go
 ```
 
@@ -145,6 +166,15 @@ mockery --case=snake --outpkg=storagemocks --output=internal/platform/storage/st
 
 Los mocks se configuran en `.mockery.yaml` y se generan automáticamente en:
 - `internal/platform/storage/storagemocks/` - Mocks de repositorios
+
+### Verificar Mocks Generados
+```bash
+# Verificar que los mocks se generaron correctamente
+ls -la internal/platform/storage/storagemocks/
+
+# Debería mostrar:
+# course_repository.go  # Mock generado automáticamente
+```
 
 ### Ejemplo de Uso en Tests
 ```go
@@ -232,6 +262,18 @@ go test ./... | grep FAIL
 go test -bench=. ./...
 ```
 
+### Verificar Estado del Proyecto
+```bash
+# Verificar que todo compila
+go build ./...
+
+# Verificar dependencias
+go mod verify
+
+# Ver tamaño del binario compilado
+du -h bin/hello-go  # ~12MB esperado
+```
+
 ## 🐛 Troubleshooting
 
 ### Error de Conexión a MySQL
@@ -243,6 +285,11 @@ go test -bench=. ./...
 1. Verificar que mockery esté instalado: `which mockery`
 2. Añadir `~/go/bin` al PATH: `export PATH=$PATH:~/go/bin`
 3. Verificar configuración en `.mockery.yaml`
+4. Si aparece "executable file not found in $PATH", ejecutar:
+   ```bash
+   export PATH=$PATH:~/go/bin
+   go generate ./internal/courses.go
+   ```
 
 ### Tests Fallan
 1. Verificar que los mocks estén generados

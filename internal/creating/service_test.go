@@ -13,7 +13,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-
 func Test_CourseService_CreateCourse_RepositoryError(test *testing.T) {
 	courseID, courseName, courseDuration := uuid.New().String(), "Go Course", "40h"
 

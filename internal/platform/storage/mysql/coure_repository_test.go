@@ -44,7 +44,7 @@ func Test_CourseRepository_Save_Success(test *testing.T) {
 
 	sqlMock.ExpectExec("INSERT INTO courses (id, name, duration) VALUES (?, ?, ?)").
 		WithArgs(courseID, courseName, courseDuration).
-		WillReturnResult(sqlmock.NewResult(0,1))
+		WillReturnResult(sqlmock.NewResult(0, 1))
 
 	repo := NewCourseRepository(db, 10*time.Second)
 
