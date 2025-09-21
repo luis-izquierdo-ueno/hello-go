@@ -24,6 +24,7 @@ const (
 	dbName = "hello-go"
 
 	shutdownTimeout = 10 * time.Second
+	dbTimeout = 10 * time.Second
 )
 
 
@@ -34,7 +35,7 @@ func Run() error {
 		return err
 	}
 
-	courseRepository := mysql.NewCourseRepository(db)
+	courseRepository := mysql.NewCourseRepository(db, dbTimeout)
 
 	creatingCourseService := creating.NewCourseService(courseRepository)
 	ctx, srv := server.New(context.Background(), host,port, shutdownTimeout, *creatingCourseService)

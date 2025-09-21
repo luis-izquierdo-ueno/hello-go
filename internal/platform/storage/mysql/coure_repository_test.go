@@ -5,6 +5,7 @@ import (
 	"errors"
 	core "hello-go/internal"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -25,7 +26,7 @@ func Test_CourseRepository_Save_RepositoryError(test *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnError(errors.New("repository error"))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 10*time.Second)
 
 	repoErr := repo.Save(context.Background(), course)
 
@@ -45,7 +46,7 @@ func Test_CourseRepository_Save_Success(test *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnResult(sqlmock.NewResult(0,1))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 10*time.Second)
 
 	repoErr := repo.Save(context.Background(), course)
 
