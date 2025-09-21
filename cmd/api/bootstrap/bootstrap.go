@@ -1,8 +1,10 @@
 package bootstrap
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"hello-go/internal/creating"
 	"hello-go/internal/platform/server"
@@ -20,6 +22,8 @@ const (
 	dbHost = "localhost"
 	dbPort = 3306
 	dbName = "hello-go"
+
+	shutdownTimeout = 10 * time.Second
 )
 
 
@@ -33,7 +37,7 @@ func Run() error {
 	courseRepository := mysql.NewCourseRepository(db)
 
 	creatingCourseService := creating.NewCourseService(courseRepository)
-	srv := server.New(host,port, *creatingCourseService)
+	ctx, srv := server.New(context.Background(), host,port, shutdownTimeout, *creatingCourseService)
 	
-	return srv.Run()
+	return srv.Run(ctx)
 }
