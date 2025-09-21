@@ -3,8 +3,11 @@ package bootstrap
 import (
 	"database/sql"
 	"fmt"
+
 	"hello-go/internal/platform/server"
 	"hello-go/internal/platform/storage/mysql"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (

@@ -25,6 +25,10 @@ func NewCourseID(value string) (CourseID, error) {
 	}, nil
 }
 
+func (id CourseID) String() string {
+	return id.value
+}
+
 type CourseRepository interface {
 	Save(ctx context.Context, course Course) error
 }
@@ -50,8 +54,8 @@ func NewCourse(id string, name string, duration string) (Course, error) {
 	}, nil
 }
 
-func (c Course) ID() string {
-	return c.id.value
+func (c Course) ID() CourseID {
+	return c.id
 }
 
 func (c Course) Name() string {
@@ -61,5 +65,3 @@ func (c Course) Name() string {
 func (c Course) Duration() string {
 	return c.duration
 }
-
-
