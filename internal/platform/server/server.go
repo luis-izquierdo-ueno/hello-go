@@ -6,6 +6,7 @@ import (
 	"hello-go/internal/creating"
 	"hello-go/internal/platform/server/handler/courses"
 	"hello-go/internal/platform/server/handler/health"
+	"hello-go/internal/platform/server/middleware/recovery"
 	"log"
 	"net/http"
 	"os"
@@ -72,6 +73,9 @@ func serverContext(ctx context.Context) context.Context {
 }
 
 func (server *Server) registerRoutes() {
+	server.engine.Use(recovery.Middleware())
+	
 	server.engine.GET("/health", health.CheckHandler())
 	server.engine.POST("/courses", courses.CreateHandler(server.creatingCourseService))
 }
+

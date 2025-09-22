@@ -1,0 +1,79 @@
+# Binarios compilados de Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Archivos de test
+*.test
+
+# Archivos de cobertura de Go
+*.out
+coverage.html
+
+# Directorio de dependencias de Go
+vendor/
+
+# Directorio de binarios
+bin/
+dist/
+
+# Archivos de configuración del IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos específicos de macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Archivos específicos de Linux
+*~
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Logs
+*.log
+logs/
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# Archivos de configuración específicos del proyecto
+config/local.yaml
+config/dev.yaml
+
+# Archivos de base de datos locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de Docker
+.dockerignore
+
+# Archivos de certificados
+*.pem
+*.key
+*.crt
+
+# Archivos de backup
+*.bak
+*.backup
+
+# Directorios de node_modules (si usas herramientas de frontend)
+node_modules/
+
+# Archivos de sistema
+Thumbs.db
+ehthumbs.db

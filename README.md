@@ -11,12 +11,14 @@ API REST desarrollada en Go usando arquitectura hexagonal con Gin como framework
 ## 🚀 Setup del Proyecto
 
 ### 1. Clonar el Repositorio
+
 ```bash
 git clone <url-del-repositorio>
 cd hello-go
 ```
 
 ### 2. Instalar Dependencias
+
 ```bash
 go mod download
 ```
@@ -24,12 +26,15 @@ go mod download
 ### 3. Configurar Base de Datos
 
 #### Crear la Base de Datos
+
 ```sql
 CREATE DATABASE `hello-go`;
 ```
 
 #### Configuración de Conexión
+
 La aplicación se conecta a MySQL con los siguientes parámetros por defecto:
+
 - **Host**: localhost
 - **Puerto**: 3306
 - **Usuario**: root
@@ -39,6 +44,7 @@ La aplicación se conecta a MySQL con los siguientes parámetros por defecto:
 > **Nota**: Para cambiar estos valores, modifica las constantes en `cmd/api/bootstrap/bootstrap.go`
 
 ### 4. Crear Tablas (si es necesario)
+
 ```sql
 USE `hello-go`;
 
@@ -53,17 +59,20 @@ CREATE TABLE courses (
 ## 🏃‍♂️ Ejecutar la Aplicación
 
 ### Desarrollo
+
 ```bash
 go run cmd/api/main.go
 ```
 
 ### Compilar y Ejecutar
+
 ```bash
 go build -o bin/hello-go cmd/api/main.go
 ./bin/hello-go
 ```
 
 ### Verificar Compilación
+
 ```bash
 # Verificar que el binario se compiló correctamente
 ls -la bin/
@@ -75,11 +84,13 @@ La aplicación se ejecutará en `http://localhost:8080`
 ## 🔧 Endpoints Disponibles
 
 ### Health Check
+
 ```http
 GET /health
 ```
 
 ### Crear Curso
+
 ```http
 POST /courses
 Content-Type: application/json
@@ -94,16 +105,19 @@ Content-Type: application/json
 ## 🧪 Testing
 
 ### Ejecutar Todos los Tests
+
 ```bash
 go test ./...
 ```
 
 ### Ejecutar Tests con Verbose
+
 ```bash
 go test -v ./...
 ```
 
 ### Ejecutar Tests de un Paquete Específico
+
 ```bash
 go test ./internal/creating/
 go test ./internal/platform/server/handler/courses/
@@ -111,11 +125,13 @@ go test -v ./internal/creating/  # Con detalles verbose
 ```
 
 ### Ejecutar Tests con Coverage
+
 ```bash
 go test -cover ./...
 ```
 
 ### Generar Reporte de Coverage HTML
+
 ```bash
 go test -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out -o coverage.html
@@ -124,9 +140,10 @@ go tool cover -html=coverage.out -o coverage.html
 > **Nota**: Esto generará `coverage.html` que puedes abrir en tu navegador para ver un reporte detallado del coverage por archivo y línea.
 
 ### Resultados de Coverage Esperados
+
 ```
 internal/creating                    coverage: 80.0% of statements
-internal/platform/server/handler/courses    coverage: 61.5% of statements  
+internal/platform/server/handler/courses    coverage: 61.5% of statements
 internal/platform/storage/mysql     coverage: 100.0% of statements
 ```
 
@@ -135,6 +152,7 @@ internal/platform/storage/mysql     coverage: 100.0% of statements
 Este proyecto utiliza [Mockery](https://github.com/vektra/mockery) para generar mocks automáticamente.
 
 ### Instalar Mockery
+
 ```bash
 go install github.com/vektra/mockery/v2@latest
 ```
@@ -142,6 +160,7 @@ go install github.com/vektra/mockery/v2@latest
 ### Generar Mocks
 
 #### Opción 1: Usar go generate (Recomendado)
+
 ```bash
 # Asegurar que mockery esté en el PATH
 export PATH=$PATH:~/go/bin
@@ -151,6 +170,7 @@ go generate ./internal/courses.go
 ```
 
 #### Opción 2: Usar mockery directamente
+
 ```bash
 # Asegurar que mockery esté en el PATH
 export PATH=$PATH:~/go/bin
@@ -165,9 +185,11 @@ mockery --case=snake --outpkg=storagemocks --output=internal/platform/storage/st
 ### Configuración de Mocks
 
 Los mocks se configuran en `.mockery.yaml` y se generan automáticamente en:
+
 - `internal/platform/storage/storagemocks/` - Mocks de repositorios
 
 ### Verificar Mocks Generados
+
 ```bash
 # Verificar que los mocks se generaron correctamente
 ls -la internal/platform/storage/storagemocks/
@@ -177,19 +199,20 @@ ls -la internal/platform/storage/storagemocks/
 ```
 
 ### Ejemplo de Uso en Tests
+
 ```go
 func TestSomething(t *testing.T) {
     // Crear mock
     mockRepo := storagemocks.NewCourseRepository(t)
-    
+
     // Configurar comportamiento esperado
     course := core.NewCourse("id", "name", "duration")
     mockRepo.On("Save", mock.Anything, course).Return(nil)
-    
+
     // Usar el mock en tu test
     service := creating.NewCourseService(mockRepo)
     err := service.CreateCourse(context.Background(), "id", "name", "duration")
-    
+
     // Las expectativas se verifican automáticamente
     assert.NoError(t, err)
 }
@@ -222,6 +245,7 @@ hello-go/
 ## 🛠️ Herramientas de Desarrollo
 
 ### Linting
+
 ```bash
 # Instalar golangci-lint
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
@@ -231,6 +255,7 @@ golangci-lint run
 ```
 
 ### Formateo de Código
+
 ```bash
 # Formatear todo el código
 go fmt ./...
@@ -242,27 +267,32 @@ goimports -w .
 ## 🔍 Comandos Útiles
 
 ### Ver Dependencias
+
 ```bash
 go mod tidy
 go mod graph
 ```
 
 ### Limpiar Módulos
+
 ```bash
 go clean -modcache
 ```
 
 ### Ver Tests que Fallan
+
 ```bash
 go test ./... | grep FAIL
 ```
 
 ### Benchmark
+
 ```bash
 go test -bench=. ./...
 ```
 
 ### Verificar Estado del Proyecto
+
 ```bash
 # Verificar que todo compila
 go build ./...
@@ -277,11 +307,13 @@ du -h bin/hello-go  # ~12MB esperado
 ## 🐛 Troubleshooting
 
 ### Error de Conexión a MySQL
+
 1. Verificar que MySQL esté corriendo
 2. Confirmar credenciales en `bootstrap.go`
 3. Verificar que la base de datos existe
 
 ### Mocks No Se Generan
+
 1. Verificar que mockery esté instalado: `which mockery`
 2. Añadir `~/go/bin` al PATH: `export PATH=$PATH:~/go/bin`
 3. Verificar configuración en `.mockery.yaml`
@@ -292,6 +324,7 @@ du -h bin/hello-go  # ~12MB esperado
    ```
 
 ### Tests Fallan
+
 1. Verificar que los mocks estén generados
 2. Revisar imports en archivos de test
 3. Ejecutar `go mod tidy` para resolver dependencias
